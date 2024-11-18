@@ -9,14 +9,14 @@ class CustomerAdmin(admin.ModelAdmin):
         (None, {"fields": ["name"]}),
         ("Customer Information", {"fields": ["pan", "ph_no"]}),
     ]
-    list_display = ["name", "cif", "ph_no"]
+    list_display = ["cif", "name", "ph_no", "created", "modified"]
 
 
 admin.site.register(Customer, CustomerAdmin)
 
 
 class BaseProductAdmin(admin.ModelAdmin):
-    list_display = ["ac_no", "ac_type", "ac_holder"]
+    list_display = ["ac_no", "ac_type", "ac_holder", "created"]
     readonly_fields = ["ac_type"]
 
     def get_queryset(self, request):
@@ -30,11 +30,6 @@ class SavingsAccountAdmin(BaseProductAdmin):
 
 @admin.register(CurrentAccount)
 class CurrentAccountAdmin(BaseProductAdmin):
-    pass
-
-
-@admin.register(CashCreditAccount)
-class CashCreditAccountAdmin(BaseProductAdmin):
     pass
 
 
@@ -52,14 +47,4 @@ class CreditCardAdmin(BaseCardsAdmin):
 
 @admin.register(DebitCard)
 class DebitCardAdmin(BaseCardsAdmin):
-    pass
-
-
-@admin.register(ATMCard)
-class ATMCardAdmin(BaseCardsAdmin):
-    pass
-
-
-@admin.register(PrepaidCard)
-class PrepaidCardAdmin(BaseCardsAdmin):
     pass
