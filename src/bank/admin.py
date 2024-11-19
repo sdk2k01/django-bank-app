@@ -7,6 +7,7 @@ from .models import *
 class CustomerAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {"fields": ["name"]}),
+        ("Linked User", {"fields": ["user"]}),
         ("Customer Information", {"fields": ["pan", "ph_no"]}),
     ]
     list_display = ["cif", "name", "ph_no", "created", "modified"]

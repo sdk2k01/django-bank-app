@@ -22,4 +22,5 @@ class Customer(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.cif} - {self.name}"
+        # return f"{self.cif} - {self.name}"
+        return self.name
