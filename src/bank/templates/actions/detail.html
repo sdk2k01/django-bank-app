@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Transaction Details</title>
+        <!-- Bootstrap CSS -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+        />
+    </head>
+
+    <body>
+		<div class="card">
+			<div class="card-body">
+				<p class="card-title font-weight-bold">Transaction Details</p>
+				<hr>
+				<p class="card-description">Transaction Information</p>
+				<ul class="about">
+				    <li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Transaction No.: </span><span class="about-item-detail">{{ transaction.txn_no }} </span>
+					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Transaction Type: </span><span class="about-item-detail">{{ transaction.type }} </span>
+					<li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Amount Transacted: </span><span class="about-item-detail">{{ transaction.amt_txned }} </span>
+                    <li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Initiated: </span><span class="about-item-detail">{{ transaction.initiated }} </span>
+				</ul>
+				<p class="card-description">Transaction Details</p>
+				<ul class="about">
+					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Remitter Ac No.: </span><span class="about-item-detail">
+		                {% if transaction.type == 'DR' %}
+                            {{ transaction.ac_no }}
+                        {% else %}
+                            NA
+                        {% endif %}
+					</span>
+					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Beneficiary Ac No.: </span><span class="about-item-detail">
+	                    {% if transaction.type == 'CR' %}
+                            {{ transaction.ac_no }}
+                        {% else %}
+                            NA
+                        {% endif %}
+					</span>
+					<li class="about-items"><i class="mdi mdi-phone icon-sm "></i><span class="about-item-name">Mode of Transfer: </span><span class="about-item-detail">TBD </span>
+				</ul>
+			</div>
+		</div>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>

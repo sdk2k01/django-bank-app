@@ -25,6 +25,7 @@ from bank.template_views import (
     CustomLoginView,
     CustomLogoutView,
     accounts,
+    actions,
     cards,
     customers,
 )
@@ -65,7 +66,7 @@ urlpatterns = [
     path(
         "customers/",
         customers.CustomerListView.as_view(),
-        name="customer-list-template",
+        name="customers-list",
     ),
     path(
         "customers/create/",
@@ -75,14 +76,14 @@ urlpatterns = [
     path(
         "customer/profile/",
         customers.CustomerDetailView.as_view(),
-        name="customer-detail-template",
+        name="customer-details",
     ),
     # Account URLs
     # Savings Account
     path(
         "accounts/sb/",
         accounts.SavingsAccountListView.as_view(),
-        name="savings-account-list",
+        name="savings-accounts-list",
     ),
     path(
         "accounts/sb/create/",
@@ -98,7 +99,7 @@ urlpatterns = [
     path(
         "accounts/ca/",
         accounts.CurrentAccountListView.as_view(),
-        name="current-account-list",
+        name="current-accounts-list",
     ),
     path(
         "accounts/ca/create/",
@@ -115,7 +116,7 @@ urlpatterns = [
     path(
         "cards/cc/",
         cards.CreditCardListView.as_view(),
-        name="credit-card-list",
+        name="credit-cards-list",
     ),
     path(
         "cards/cc/create/",
@@ -131,7 +132,7 @@ urlpatterns = [
     path(
         "cards/dc/",
         cards.DebitCardListView.as_view(),
-        name="debit-card-list",
+        name="debit-cards-list",
     ),
     path(
         "cards/dc/create/",
@@ -142,5 +143,29 @@ urlpatterns = [
         "cards/dc/<str:pk>/",
         cards.DebitCardDetailView.as_view(),
         name="debit-card-details",
+    ),
+    # Actions
+    # Deposit
+    path(
+        "deposit/",
+        actions.DepositCreationView.as_view(),
+        name="deposit-creation-template",
+    ),
+    # Withdraw
+    path(
+        "withdraw/",
+        actions.WithdrawCreationView.as_view(),
+        name="withdraw-creation-template",
+    ),
+    # Transactions
+    path(
+        "transactions/",
+        actions.TransactionsListView.as_view(),
+        name="transactions-list",
+    ),
+    path(
+        "transactions/<int:pk>/",
+        actions.TransactionDetailView.as_view(),
+        name="transaction-details",
     ),
 ]

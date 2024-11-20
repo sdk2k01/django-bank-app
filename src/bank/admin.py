@@ -49,3 +49,9 @@ class CreditCardAdmin(BaseCardsAdmin):
 @admin.register(DebitCard)
 class DebitCardAdmin(BaseCardsAdmin):
     pass
+
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    fields = ["txn_no", "type", "amt_txned", "initiated", "ac_no"]
+    readonly_fields = ["txn_no", "type", "amt_txned", "initiated", "ac_no"]
