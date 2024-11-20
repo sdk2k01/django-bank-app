@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.http import Http404
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 from django.views.generic import CreateView, DetailView, ListView
 
 from bank.models.customers import Customer
@@ -17,6 +19,25 @@ class CustomerDetailView(DetailView):
     model = Customer
     template_name = "customers/detail.html"
     context_object_name = "customer"
+
+    def get_object(self, queryset=None):
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404(
+                _("No %(verbose_name)s found matching the query")
+                % {"verbose_name": queryset.model._meta.verbose_name}
+            )
+        return obj
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
 
 
 class CustomerCreationForm(forms.ModelForm):

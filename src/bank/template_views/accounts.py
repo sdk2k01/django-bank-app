@@ -8,7 +8,7 @@ from django.views.generic import CreateView, DetailView, ListView
 from bank.models import CurrentAccount, Customer, SavingsAccount
 
 
-# Base Account Mixins
+# Base Account Mixins & Forms
 class BaseAccountMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

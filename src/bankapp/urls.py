@@ -21,7 +21,13 @@ from rest_framework import urlpatterns
 from rest_framework.routers import DefaultRouter
 
 from bank import views
-from bank.template_views import CustomLoginView, accounts, customers
+from bank.template_views import (
+    CustomLoginView,
+    CustomLogoutView,
+    accounts,
+    cards,
+    customers,
+)
 
 # router = DefaultRouter()
 # router.register(r'customers', views.CustomerViewSet, basename='customer')
@@ -52,8 +58,9 @@ from bank.template_views import CustomLoginView, accounts, customers
 urlpatterns = [
     # Admin
     path("admin/", admin.site.urls),
-    # Login User
+    # Login/Logout User
     path("login/", CustomLoginView.as_view(), name="login"),
+    path("logout/", CustomLogoutView.as_view(), name="logout"),
     # Customer URLs
     path(
         "customers/",
@@ -66,7 +73,7 @@ urlpatterns = [
         name="customer-create-template",
     ),
     path(
-        "customers/<int:pk>/",
+        "customer/profile/",
         customers.CustomerDetailView.as_view(),
         name="customer-detail-template",
     ),
@@ -102,5 +109,38 @@ urlpatterns = [
         "accounts/ca/<str:pk>/",
         accounts.CurrentAccountDetailView.as_view(),
         name="current-account-details",
+    ),
+    # Cards
+    # Credit Card
+    path(
+        "cards/cc/",
+        cards.CreditCardListView.as_view(),
+        name="credit-card-list",
+    ),
+    path(
+        "cards/cc/create/",
+        cards.CreditCardCreationView.as_view(),
+        name="credit-card-creation-template",
+    ),
+    path(
+        "cards/cc/<str:pk>/",
+        cards.CreditCardDetailView.as_view(),
+        name="credit-card-detials",
+    ),
+    # Debit Card
+    path(
+        "cards/dc/",
+        cards.DebitCardListView.as_view(),
+        name="debit-card-list",
+    ),
+    path(
+        "cards/dc/create/",
+        cards.DebitCardCreationView.as_view(),
+        name="debit-card-creation-template",
+    ),
+    path(
+        "cards/dc/<str:pk>/",
+        cards.DebitCardDetailView.as_view(),
+        name="debit-card-details",
     ),
 ]
