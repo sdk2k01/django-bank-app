@@ -21,6 +21,13 @@ class Customer(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
+    def __init__(self, *args, **kwargs):
+        # Prevent manual setting of immutable fields
+        for field in ["cif", "created", "modified"]:
+            if field in kwargs:
+                raise TypeError(f"'{field}' cannot be manually set")
+        super().__init__(*args, **kwargs)
+
     def __str__(self) -> str:
         # return f"{self.cif} - {self.name}"
         return self.name

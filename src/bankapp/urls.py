@@ -17,8 +17,6 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework import urlpatterns
-from rest_framework.routers import DefaultRouter
 
 from bank import views
 from bank.template_views import (
@@ -30,35 +28,28 @@ from bank.template_views import (
     customers,
 )
 
-# router = DefaultRouter()
-# router.register(r'customers', views.CustomerViewSet, basename='customer')
-
-# urlpatterns = [
-# path('', include(router.urls)),
-# path("admin/", admin.site.urls),
-# path("api-auth/", include("rest_framework.urls")),
-# # Customer Actions
-# path("customers/", views.CustomersView.as_view()),
-# path("customers/<int:pk>/", views.CustomerView.as_view()),
-# # Account Actions
-# path("accounts/", views.ListAccountsView.as_view()),
-# path("accounts/details/<str:ac_no>/", views.CustomerAccountsView.as_view()),
-# path("accounts/create/", views.AccountCreationView.as_view()),
-# # Card Actions
-# path("cards/", views.ListCardsView.as_view()),
-# path("cards/create/<str:ac_no>/", views.CardsCreationView.as_view()),
-# path("cards/details/<str:card_no>/", views.AccountCardsView.as_view()),
-# # Banking Actions
-# path("deposit/", views.Deposit.as_view()),
-# path("withdraw/", views.Withdraw.as_view()),
-# path("transactions/", views.ListTransactions.as_view()),
-# path("transactions/user/", views.UserTransactions.as_view()),
-# path("transactions/details/<int:pk>", views.TransactionDetails.as_view()),
-# ]
-
 urlpatterns = [
-    # Admin
     path("admin/", admin.site.urls),
+    path("api-auth/", include("rest_framework.urls")),
+    # API-v1 #
+    # Customer Actions
+    path("api/v1/customers/", views.CustomersView.as_view()),
+    path("api/v1/customers/<int:pk>/", views.CustomerView.as_view()),
+    # Account Actions
+    path("api/v1/accounts/", views.ListAccountsView.as_view()),
+    path("api/v1/accounts/details/<str:ac_no>/", views.CustomerAccountsView.as_view()),
+    path("api/v1/accounts/create/", views.AccountCreationView.as_view()),
+    # Card Actions
+    path("api/v1/cards/", views.ListCardsView.as_view()),
+    path("api/v1/cards/create/<str:ac_no>/", views.CardsCreationView.as_view()),
+    path("api/v1/cards/details/<str:card_no>/", views.AccountCardsView.as_view()),
+    # Banking Actions
+    path("api/v1/deposit/", views.Deposit.as_view()),
+    path("api/v1/withdraw/", views.Withdraw.as_view()),
+    path("api/v1/transactions/", views.ListTransactions.as_view()),
+    path("api/v1/transactions/user/", views.UserTransactions.as_view()),
+    path("api/v1/transactions/details/<int:pk>", views.TransactionDetails.as_view()),
+    # UI #
     # Login/Logout User
     path("login/", CustomLoginView.as_view(), name="login"),
     path("logout/", CustomLogoutView.as_view(), name="logout"),

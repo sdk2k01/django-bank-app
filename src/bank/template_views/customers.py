@@ -57,7 +57,7 @@ class CustomerCreateView(CreateView):
     model = Customer
     form_class = CustomerCreationForm
     template_name = "customers/create.html"
-    success_url = reverse_lazy("customer-list-template")
+    success_url = reverse_lazy("customers-list")
 
     @transaction.atomic  # Make user creation and customer creation atomic
     def form_valid(self, form):
