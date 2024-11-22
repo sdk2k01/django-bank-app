@@ -14,37 +14,94 @@
     </head>
 
     <body>
-		<div class="card">
-			<div class="card-body">
-				<p class="card-title font-weight-bold">Profile</p>
-				<hr>
-				<p class="card-description">User Information</p>
-				<ul class="about">
-				    <li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">CIF No.: </span><span class="about-item-detail">{{ customer.cif }} </span><a href="" class="about-item-edit">Edit</a></li>
-					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Name: </span><span class="about-item-detail">{{ customer.name }} </span><a href="" class="about-item-edit">Edit</a></li>
-					<li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">PAN No.: </span><span class="about-item-detail">{{ customer.pan }} </span> <a href="" class="about-item-edit">Edit</a></li>
-                    <li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Created: </span><span class="about-item-detail">{{ customer.created }} </span> <a href="" class="about-item-edit">Edit</a></li>
-                    <li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Modified: </span><span class="about-item-detail">{{ customer.modified }} </span> <a href="" class="about-item-edit">Edit</a></li>
-				</ul>
-				<p class="card-description">Contact Information</p>
-				<ul class="about">
-					<li class="about-items"><i class="mdi mdi-phone icon-sm "></i><span class="about-item-name">Phone: </span><span class="about-item-detail">{{ customer.ph_no }} </span><a href="" class="about-item-edit">Edit</a></li>
-					<li class="about-items"><i class="mdi mdi-map-marker icon-sm "></i><span class="about-item-name">Address: </span><span class="about-item-detail">TBD </span> <a href="" class="about-item-edit">Edit</a></li>
-					<li class="about-items"><i class="mdi mdi-email-outline icon-sm "></i><span class="about-item-name">Email: </span><span class="about-item-detail"><a href="">user@example.com </a></span> <a href="" class="about-item-edit">Edit</a></li>
-				</ul>
-				<p class="card-description">Basic Information</p>
-				<ul class="about">
-					<li class="about-items"><i class="mdi mdi-cake icon-sm "></i><span class="about-item-name">Date of Birth: </span><span class="about-item-detail">dd/mm/yyyy </span><a href="" class="about-item-edit">Edit</a></li>
-					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Gender: </span><span class="about-item-detail">TBD </span> <a href="" class="about-item-edit">Edit</a></li>
-				</ul>
-			</div>
-		</div>
-		<!-- Logout Button -->
+        <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-title font-weight-bold">Profile</p>
+                <hr />
+                <p class="card-description">User Information</p>
+                <ul class="about">
+                    <li class="about-items">
+                        <i class="mdi mdi-account icon-sm"></i
+                        ><span class="about-item-name">CIF No.: </span
+                        ><span class="about-item-detail"
+                            >{{ customer.cif }}
+                        </span>
+                    </li>
+                    <li class="about-items">
+                        <i class="mdi mdi-account icon-sm"></i
+                        ><span class="about-item-name">Name: </span
+                        ><span class="about-item-detail"
+                            >{{ customer.name }} </span
+                        ><a href="edit/" class="about-item-edit">Edit</a>
+                    </li>
+                    <li class="about-items">
+                        <i class="mdi mdi-mail-ru icon-sm"></i
+                        ><span class="about-item-name">PAN No.: </span
+                        ><span class="about-item-detail"
+                            >{{ customer.pan }}
+                        </span>
+                    </li>
+                    <li class="about-items">
+                        <i class="mdi mdi-mail-ru icon-sm"></i
+                        ><span class="about-item-name">Created: </span
+                        ><span class="about-item-detail"
+                            >{{ customer.created }}
+                        </span>
+                    </li>
+                    <li class="about-items">
+                        <i class="mdi mdi-mail-ru icon-sm"></i
+                        ><span class="about-item-name">Modified: </span
+                        ><span class="about-item-detail"
+                            >{{ customer.modified }}
+                        </span>
+                    </li>
+                </ul>
+                <p class="card-description">Contact Information</p>
+                <ul class="about">
+                    <li class="about-items">
+                        <i class="mdi mdi-phone icon-sm"></i
+                        ><span class="about-item-name">Phone: </span
+                        ><span class="about-item-detail"
+                            >{{ customer.ph_no }} </span
+                        ><a href="edit/" class="about-item-edit">Edit</a>
+                    </li>
+                    <li class="about-items">
+                        <i class="mdi mdi-map-marker icon-sm"></i
+                        ><span class="about-item-name">Address: </span
+                        ><span class="about-item-detail">TBD </span>
+                        <a href="" class="about-item-edit">Edit</a>
+                    </li>
+                    <li class="about-items">
+                        <i class="mdi mdi-email-outline icon-sm"></i
+                        ><span class="about-item-name">Email: </span
+                        ><span class="about-item-detail"
+                            ><a href="">user@example.com </a></span
+                        >
+                        <a href="" class="about-item-edit">Edit</a>
+                    </li>
+                </ul>
+                <p class="card-description">Basic Information</p>
+                <ul class="about">
+                    <li class="about-items">
+                        <i class="mdi mdi-cake icon-sm"></i
+                        ><span class="about-item-name">Date of Birth: </span
+                        ><span class="about-item-detail">dd/mm/yyyy </span>
+                    <li class="about-items">
+                        <i class="mdi mdi-account icon-sm"></i
+                        ><span class="about-item-name">Gender: </span
+                        ><span class="about-item-detail">TBD </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+        <!-- Logout Button -->
         <div class="container mt-3">
-          <form method="post" action="/logout/">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Logout</button>
-          </form>
+            <form method="post" action="/logout/">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
         </div>
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

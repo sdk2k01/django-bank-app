@@ -1,10 +1,11 @@
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from bank.models.customers import Customer
 
@@ -15,7 +16,7 @@ class CustomerListView(ListView):
     context_object_name = "customers"
 
 
-class CustomerDetailView(DetailView):
+class CustomerDetailView(LoginRequiredMixin, DetailView):
     model = Customer
     template_name = "customers/detail.html"
     context_object_name = "customer"
@@ -74,3 +75,31 @@ class CustomerCreateView(CreateView):
 
             return super().form_valid(form)
         return super().form_invalid(form)
+
+
+class CustomerUpdateView(LoginRequiredMixin, UpdateView):
+    model = Customer
+    fields = ["name", "ph_no"]
+    template_name = "customers/update.html"
+    context_object_name = "customer"
+    success_url = reverse_lazy("customer-details")
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        try:
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404(
+                _("No %(verbose_name)s found matching the query")
+                % {"verbose_name": queryset.model._meta.verbose_name}
+            )
+        return obj
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        return form

@@ -69,6 +69,11 @@ urlpatterns = [
         customers.CustomerDetailView.as_view(),
         name="customer-details",
     ),
+    path(
+        "customer/profile/edit/",
+        customers.CustomerUpdateView.as_view(),
+        name="edit-customer-details",
+    ),
     # Account URLs
     # Savings Account
     path(
