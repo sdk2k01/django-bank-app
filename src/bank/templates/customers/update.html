@@ -14,6 +14,41 @@
     </head>
 
     <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a href="#" class="navbar-brand">BankApp</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav">
+                        <a href="#" class="nav-item nav-link active">Profile</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Accounts</a>
+                            <div class="dropdown-menu">
+                                <a href="/accounts/sb/" class="dropdown-item">Savings Accounts</a>
+                                <a href="/accounts/ca/" class="dropdown-item">Current Accounts</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Cards</a>
+                            <div class="dropdown-menu">
+                                <a href="/cards/cc/" class="dropdown-item">Credit Cards</a>
+                                <a href="/cards/dc/" class="dropdown-item">Debit Cards</a>
+                            </div>
+                        </div>
+                        <a href="/transactions/" class="nav-item nav-link">Transactions</a>
+                    </div>
+
+                    <div class="navbar-nav ms-auto">
+                        <form method="post" action="/logout/" class="nav-item">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link btn btn-link">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
         <div class="container mt-4">
             <form method="post">
                 {% csrf_token %}
