@@ -6,10 +6,17 @@ class CustomLoginView(LoginView):
     template_name = "registration/login.html"
 
     def get_success_url(self) -> str:
-        redirect_to = self.request.GET.get("next", "/customer/profile/")
+        redirect_to = self.request.GET.get("next")
         # TBD: Ensure URL is safe
         if redirect_to:
             return redirect_to
+
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return reverse_lazy(
+                "customers-list"
+            )  # Assuming 'customers-list' is the URL name for "customers/"
+        else:
+            return reverse_lazy("customer-details")
 
 
 class CustomLogoutView(LogoutView):

@@ -1,8 +1,11 @@
 from django import forms
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
@@ -10,7 +13,24 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from bank.models.customers import Customer
 
 
-class CustomerListView(ListView):
+# Create a base mixin for admin-only access
+class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated:
+            print(self.get_login_url())
+            messages.error(
+                self.request, "You don't have permission to access this page."
+            )
+            return HttpResponseForbidden(
+                "403 Forbidden: You don't have permission to access this page."
+            )
+        return redirect(f"/{self.get_login_url()}?next={self.request.path}")
+
+
+class CustomerListView(AdminRequiredMixin, ListView):
     model = Customer
     template_name = "customers/list.html"
     context_object_name = "customers"
@@ -54,7 +74,7 @@ class CustomerCreationForm(forms.ModelForm):
         return cleaned_data
 
 
-class CustomerCreateView(CreateView):
+class CustomerCreateView(AdminRequiredMixin, CreateView):
     model = Customer
     form_class = CustomerCreationForm
     template_name = "customers/create.html"
