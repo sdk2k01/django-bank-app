@@ -2,8 +2,6 @@ import random
 
 import factory
 
-from bank.models.products import SavingsAccount
-
 # from django.contrib.auth.models import User
 from .models import Customer
 from .providers import fake

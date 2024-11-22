@@ -1,8 +1,5 @@
-from uu import test
-
 from django.contrib.auth.models import User
 from django.test import TestCase
-from django.utils import timezone
 from factory import Faker
 
 from bank.factories import CustomerFactory

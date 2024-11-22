@@ -12,12 +12,6 @@ class TestRegisterUser(TestCase):
     Unit Test Case dealing with user registration.
     """
 
-    def setUp(self) -> None:
-        pass
-
-    def tearDown(self) -> None:
-        pass
-
     def test_register_user_happy_path(self):
         """
         Test whether user registration is properly implemented.
