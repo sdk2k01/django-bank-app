@@ -17,3 +17,5 @@ class Transaction(models.Model):
     amt_txned = models.PositiveIntegerField()
     type = models.CharField(max_length=2, choices=TXN_CHOICES, null=False)
     ac_no = models.CharField(max_length=20)
+
+    objects = models.Manager()

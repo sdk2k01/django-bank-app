@@ -17,8 +17,7 @@ admin.site.register(Customer, CustomerAdmin)
 
 
 class BaseProductAdmin(admin.ModelAdmin):
-    list_display = ["ac_no", "ac_type", "ac_holder", "created"]
-    readonly_fields = ["ac_type"]
+    list_display = ["ac_no", "ac_holder", "created"]
 
     def get_queryset(self, request):
         return super().get_queryset(request)
@@ -35,8 +34,6 @@ class CurrentAccountAdmin(BaseProductAdmin):
 
 
 class BaseCardsAdmin(admin.ModelAdmin):
-    readonly_fields = ["card_type"]
-
     def get_queryset(self, request):
         return super().get_queryset(request)
 

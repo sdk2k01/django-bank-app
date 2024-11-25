@@ -14,40 +14,76 @@
     </head>
 
     <body>
-        <form method="post">{% csrf_token %}
-            <div class="form-group row">
-              <label for="selectAccount" class="col-sm-2 col-form-label">Ac No.</label>
-              <div class="col-sm-10">
-                  <select class="form-select" id="selectAccount" name="ac_no" required>
-                      <option value="">Choose an account...</option>
-                      {% for account in customer_accounts %}
-                      <option value="{{ account }}">{{ account }}</option>
-                      {% endfor %}
-                  </select>
-                  {% if not customer_accounts %}
-                  <div class="form-text text-danger">
-                      No eligible accounts found. Please create an account first.
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a href="#" class="navbar-brand">BankApp</a>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav">
+                        <a href="/customer/profile/" class="nav-item nav-link">Profile</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Accounts</a>
+                            <div class="dropdown-menu">
+                                <a href="/accounts/sb/" class="dropdown-item">Savings Accounts</a>
+                                <a href="/accounts/ca/" class="dropdown-item">Current Accounts</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Cards</a>
+                            <div class="dropdown-menu">
+                                <a href="/cards/cc/" class="dropdown-item">Credit Cards</a>
+                                <a href="/cards/dc/" class="dropdown-item">Debit Cards</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Transactions</a>
+                            <div class="dropdown-menu">
+                                <a href="/transactions" class="dropdown-item">List</a>
+                                <a href="/deposit" class="dropdown-item">Deposit</a>
+                                <a href="/withdraw" class="dropdown-item">Withdrawal</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="navbar-nav ms-auto">
+                        <form method="post" action="/logout/" class="nav-item">
+                            {% csrf_token %}
+                            <button type="submit" class="nav-link btn btn-link">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="container mt-4">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group row mb-3">
+                    <label for="selectAccount" class="col-sm-2 col-form-label">Select Account</label>
+                    <div class="col-sm-10">
+                        <select class="form-select" id="selectAccount" name="ac_no" required>
+                            <option value="">Choose an account...</option>
+                            {% for account in customer_accounts %}
+                            <option value="{{ account }}">{{ account }}</option>
+                            {% endfor %}
+                        </select>
+                            {% if not customer_accounts %}
+                            <div class="form-text text-danger">
+                                No eligible accounts found. Please create an account first.
+                            </div>
+                            {% endif %}
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                  <label for="inputAmount" class="col-sm-2 col-form-label">Amount</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputAmount" name="amt_txned" placeholder="Amount to Withdraw">
                   </div>
-                  {% endif %}
-            </div>
-            <div class="form-group row">
-              <label for="inputAmount" class="col-sm-2 col-form-label">Amount</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputAmount" name="amt_txned" placeholder="Amount to Withdraw">
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Withdraw</button>
-              </div>
-            </div>
-        </form>
-        <!-- Logout Button -->
-        <div class="container mt-3">
-        <form method="post" action="/logout/">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
+                </div>
+                <div class="form-group row mb-3">
+                    <div class="col-sm-10 offset-sm-2">
+                        <button type="submit" class="btn btn-primary">Withdraw Amount</button>
+                    </div>
+                </div>
+            </form>
         </div>
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

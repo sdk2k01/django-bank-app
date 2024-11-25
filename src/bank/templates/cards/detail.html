@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -21,13 +22,7 @@
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/customer/profile">Home</a></li>
             <li class="breadcrumb-item"><a href="/customer/profile">Cards</a></li>
-            <li class="breadcrumb-item"><a href="/cards/{{ card.card_type|lower }}">
-                {% if card.card_type == 'CC' %}
-                    Credit Card
-                {% elif card.card_type == 'DC' %}
-                    Debit Card
-                {% endif %}
-            </a></li>
+            <li class="breadcrumb-item"><a href="/cards/{{ card_type|lower_initials }}">{{ card_type }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ card.card_no }}</li>
           </ol>
         </div>
@@ -47,14 +42,13 @@
 				<p class="card-description">Issuance Information</p>
 				<ul class="about">
 				    <li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Ac No.: </span><span class="about-item-detail">{{ card.ac_no }} </span>
-					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Card Type: </span><span class="about-item-detail">{{ card.card_type }} </span>
 					<li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Issued: </span><span class="about-item-detail">{{ card.issued }} </span>
                     <li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Expiry: </span><span class="about-item-detail">{{ card.expiry }} </span>
 				</ul>
 				<p class="card-description">Card Information</p>
 				<ul class="about">
-					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Card Type: </span><span class="about-item-detail">{{ card.card_type }} </span>
-					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Card No.: </span><span class="about-item-detail">XXXXXXXXXXXXXXXX </span>
+					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Card Type: </span><span class="about-item-detail">{{ card_type }} </span>
+					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Card No.: </span><span class="about-item-detail">{{ card.card_no }} </span>
 					<li class="about-items"><i class="mdi mdi-map-marker icon-sm "></i><span class="about-item-name">CVV: </span><span class="about-item-detail">XXX </span>
 					<li class="about-items"><i class="mdi mdi-phone icon-sm "></i><span class="about-item-name">Mode of Operation: </span><span class="about-item-detail">Single </span>
 				</ul>

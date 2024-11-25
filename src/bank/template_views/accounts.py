@@ -1,21 +1,11 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.db import transaction
-from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView
 
-from bank.models import CurrentAccount, Customer, SavingsAccount
+from bank.models import CurrentAccount, SavingsAccount
 
 
 # Base Account Mixins & Forms
-class BaseAccountMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["ac_type"] = self.model.__name__
-        return context
-
-
 class BaseAccountListMixin:
     template_name = "accounts/list.html"
     context_object_name = "accounts"
@@ -30,6 +20,16 @@ class BaseAccountDetailMixin:
 
     def get_queryset(self):
         return self.model.objects.filter(ac_holder=self.request.user.customer_profile)
+
+
+class SavingsAccountMixin:
+    model = SavingsAccount
+    extra_context = {"account_type": "Savings Bank Account"}
+
+
+class CurrentAccountMixin:
+    model = CurrentAccount
+    extra_context = {"account_type": "Current Account"}
 
 
 class SavingsAccountCreationForm(forms.ModelForm):
@@ -54,6 +54,7 @@ class CurrentAccountCreationForm(forms.ModelForm):
 
 class BaseAccountCreationMixin:
     template_name = "accounts/create.html"
+    context_object_name = "customer"
 
     def form_valid(self, form):
         customer = self.request.user.customer_profile
@@ -62,31 +63,26 @@ class BaseAccountCreationMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["account_type"] = self.request.path.rstrip("/").rsplit("/", maxsplit=2)[
-            -2
-        ]
+        context["customer"] = self.request.user.customer_profile
         return context
 
 
 # Savings Account Views
 class SavingsAccountListView(
-    LoginRequiredMixin, BaseAccountMixin, BaseAccountListMixin, ListView
+    LoginRequiredMixin, SavingsAccountMixin, BaseAccountListMixin, ListView
 ):
-    model = SavingsAccount
     redirect_field_name = "/accounts/sb/"
 
 
 class SavingsAccountDetailView(
-    LoginRequiredMixin, BaseAccountMixin, BaseAccountDetailMixin, DetailView
+    LoginRequiredMixin, SavingsAccountMixin, BaseAccountDetailMixin, DetailView
 ):
-    model = SavingsAccount
     redirect_field_name = "/accounts/sb/"
 
 
 class SavingsAccountCreationView(
-    LoginRequiredMixin, BaseAccountCreationMixin, CreateView
+    LoginRequiredMixin, SavingsAccountMixin, BaseAccountCreationMixin, CreateView
 ):
-    model = SavingsAccount
     form_class = SavingsAccountCreationForm
     redirect_field_name = "/accounts/sb/create/"
     success_url = "/accounts/sb/"
@@ -94,23 +90,20 @@ class SavingsAccountCreationView(
 
 # Current Account Views
 class CurrentAccountListView(
-    LoginRequiredMixin, BaseAccountMixin, BaseAccountListMixin, ListView
+    LoginRequiredMixin, CurrentAccountMixin, BaseAccountListMixin, ListView
 ):
-    model = CurrentAccount
     redirect_field_name = "/accounts/ca/"
 
 
 class CurrentAccountDetailView(
-    LoginRequiredMixin, BaseAccountMixin, BaseAccountDetailMixin, DetailView
+    LoginRequiredMixin, CurrentAccountMixin, BaseAccountDetailMixin, DetailView
 ):
-    model = CurrentAccount
     redirect_field_name = "/accounts/ca/"
 
 
 class CurrentAccountCreationView(
-    LoginRequiredMixin, BaseAccountCreationMixin, CreateView
+    LoginRequiredMixin, CurrentAccountMixin, BaseAccountCreationMixin, CreateView
 ):
-    model = CurrentAccount
     form_class = CurrentAccountCreationForm
     redirect_field_name = "/accounts/ca/create/"
     success_url = "/accounts/ca/"

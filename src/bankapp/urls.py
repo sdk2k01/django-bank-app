@@ -30,25 +30,25 @@ from bank.template_views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api-auth/", include("rest_framework.urls")),
-    # API-v1 #
-    # Customer Actions
-    path("api/v1/customers/", views.CustomersView.as_view()),
-    path("api/v1/customers/<int:pk>/", views.CustomerView.as_view()),
-    # Account Actions
-    path("api/v1/accounts/", views.ListAccountsView.as_view()),
-    path("api/v1/accounts/details/<str:ac_no>/", views.CustomerAccountsView.as_view()),
-    path("api/v1/accounts/create/", views.AccountCreationView.as_view()),
-    # Card Actions
-    path("api/v1/cards/", views.ListCardsView.as_view()),
-    path("api/v1/cards/create/<str:ac_no>/", views.CardsCreationView.as_view()),
-    path("api/v1/cards/details/<str:card_no>/", views.AccountCardsView.as_view()),
-    # Banking Actions
-    path("api/v1/deposit/", views.Deposit.as_view()),
-    path("api/v1/withdraw/", views.Withdraw.as_view()),
-    path("api/v1/transactions/", views.ListTransactions.as_view()),
-    path("api/v1/transactions/user/", views.UserTransactions.as_view()),
-    path("api/v1/transactions/details/<int:pk>", views.TransactionDetails.as_view()),
+    # path("api-auth/", include("rest_framework.urls")),
+    # # API-v1 #
+    # # Customer Actions
+    # path("api/v1/customers/", views.CustomersView.as_view()),
+    # path("api/v1/customers/<int:pk>/", views.CustomerView.as_view()),
+    # # Account Actions
+    # path("api/v1/accounts/", views.ListAccountsView.as_view()),
+    # path("api/v1/accounts/details/<str:ac_no>/", views.CustomerAccountsView.as_view()),
+    # path("api/v1/accounts/create/", views.AccountCreationView.as_view()),
+    # # Card Actions
+    # path("api/v1/cards/", views.ListCardsView.as_view()),
+    # path("api/v1/cards/create/<str:ac_no>/", views.CardsCreationView.as_view()),
+    # path("api/v1/cards/details/<str:card_no>/", views.AccountCardsView.as_view()),
+    # # Banking Actions
+    # path("api/v1/deposit/", views.Deposit.as_view()),
+    # path("api/v1/withdraw/", views.Withdraw.as_view()),
+    # path("api/v1/transactions/", views.ListTransactions.as_view()),
+    # path("api/v1/transactions/user/", views.UserTransactions.as_view()),
+    # path("api/v1/transactions/details/<int:pk>", views.TransactionDetails.as_view()),
     # UI #
     # Login/Logout User
     path("login/", CustomLoginView.as_view(), name="login"),

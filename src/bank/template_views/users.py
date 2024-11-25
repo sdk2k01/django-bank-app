@@ -12,9 +12,7 @@ class CustomLoginView(LoginView):
             return redirect_to
 
         if self.request.user.is_staff or self.request.user.is_superuser:
-            return reverse_lazy(
-                "customers-list"
-            )  # Assuming 'customers-list' is the URL name for "customers/"
+            return reverse_lazy("customers-list")  # URL name for "customers/"
         else:
             return reverse_lazy("customer-details")
 

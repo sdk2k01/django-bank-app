@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -21,13 +22,7 @@
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/customer/profile">Home</a></li>
             <li class="breadcrumb-item"><a href="/customer/profile">Accounts</a></li>
-            <li class="breadcrumb-item"><a href="/accounts/{{ account.ac_type|lower }}">
-                {% if account.ac_type == 'SB' %}
-                    Savings Accounts
-                {% elif account.ac_type == 'CA' %}
-                    Current Accounts
-                {% endif %}
-            </a></li>
+            <li class="breadcrumb-item"><a href="/accounts/{{ account_type|lower_initials }}">{{ account_type }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ account.ac_no }}</li>
           </ol>
         </div>
@@ -47,8 +42,8 @@
 				<p class="card-description">Account Information</p>
 				<ul class="about">
 				    <li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Ac No.: </span><span class="about-item-detail">{{ account.ac_no }} </span>
-					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Ac Type: </span><span class="about-item-detail">{{ account.ac_type }} </span>
-					<li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Ac Holder: </span><span class="about-item-detail">{{ account.ac_holder }} </span>
+					<li class="about-items"><i class="mdi mdi-account icon-sm "></i><span class="about-item-name">Ac Type: </span><span class="about-item-detail">{{ account_type }} </span>
+					<li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Ac Holder: </span><span class="about-item-detail">{{ account.ac_holder.name }} </span>
                     <li class="about-items"><i class="mdi mdi-mail-ru icon-sm "></i><span class="about-item-name">Created: </span><span class="about-item-detail">{{ account.created }} </span>
 				</ul>
 				<p class="card-description">Account Details</p>

@@ -32,7 +32,14 @@
                             <a href="/cards/dc/" class="dropdown-item">Debit Cards</a>
                         </div>
                     </div>
-                    <a href="/transactions/" class="nav-item nav-link">Transactions</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Transactions</a>
+                        <div class="dropdown-menu">
+                            <a href="/transactions" class="dropdown-item">List</a>
+                            <a href="/deposit" class="dropdown-item">Deposit</a>
+                            <a href="/withdraw" class="dropdown-item">Withdrawal</a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="navbar-nav ms-auto">
@@ -46,10 +53,13 @@
     </nav>
 <div class="m-4">
     <div class="table-responsive">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>{{ card_type }}s List</h2>
+            <a href="create/" class="btn btn-primary">Add {{ card_type }}</a>
+        </div>
         <table class="table">
             <thead>
                 <tr>
-                    <th>Card Type</th>
                     <th>Card Number</th>
                     <th>Account Number</th>
                     <th>Issued</th>
@@ -59,7 +69,6 @@
             <tbody>
                 {% for card in cards %}
                 <tr>
-                    <td>{{ card.card_type }}</td>
                     <td>
                         <a href="{{ card.card_no }}">{{ card.card_no }}</a>
                     </td>

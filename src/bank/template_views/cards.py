@@ -8,11 +8,6 @@ from bank.models import CreditCard, CurrentAccount, Customer, DebitCard, Savings
 
 # Base Card Mixins & Forms
 class BaseCardMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["card_type"] = self.model.__name__
-        return context
-
     def get_customer_accounts(self):
         customer = get_object_or_404(Customer, user=self.request.user)
         customer_accounts = []
@@ -68,7 +63,6 @@ class BaseCardCreationMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["card_type"] = self.request.path.rstrip("/").rsplit("/", maxsplit=2)[-2]
         context["customer_accounts"] = self.get_customer_accounts()
         return context
 
@@ -93,43 +87,53 @@ class BaseCardCreationMixin:
         return super().form_valid(form)
 
 
+class CreditCardMixin:
+    model = CreditCard
+    extra_context = {"card_type": "Credit Card"}
+
+
+class DebitCardMixin:
+    model = DebitCard
+    extra_context = {"card_type": "Debit Card"}
+
+
 # Credit Card Actions
 class CreditCardListView(
-    LoginRequiredMixin, BaseCardMixin, BaseCardListMixin, ListView
+    LoginRequiredMixin, CreditCardMixin, BaseCardMixin, BaseCardListMixin, ListView
 ):
-    model = CreditCard
     redirect_field_name = "/cards/cc/"
 
 
 class CreditCardDetailView(
-    LoginRequiredMixin, BaseCardMixin, BaseCardDetailMixin, DetailView
+    LoginRequiredMixin, CreditCardMixin, BaseCardMixin, BaseCardDetailMixin, DetailView
 ):
-    model = CreditCard
     redirect_field_name = "/cards/cc/"
 
 
-class CreditCardCreationView(LoginRequiredMixin, BaseCardCreationMixin, CreateView):
-    model = CreditCard
+class CreditCardCreationView(
+    LoginRequiredMixin, CreditCardMixin, BaseCardCreationMixin, CreateView
+):
     form_class = CreditCardCreationForm
     redirect_field_name = "/cards/cc/create/"
     success_url = "/cards/cc/"
 
 
 # Debit Card Actions
-class DebitCardListView(LoginRequiredMixin, BaseCardMixin, BaseCardListMixin, ListView):
-    model = DebitCard
+class DebitCardListView(
+    LoginRequiredMixin, DebitCardMixin, BaseCardMixin, BaseCardListMixin, ListView
+):
     redirect_field_name = "/cards/dc/"
 
 
 class DebitCardDetailView(
-    LoginRequiredMixin, BaseCardMixin, BaseCardDetailMixin, DetailView
+    LoginRequiredMixin, DebitCardMixin, BaseCardMixin, BaseCardDetailMixin, DetailView
 ):
-    model = DebitCard
     redirect_field_name = "/cards/dc/"
 
 
-class DebitCardCreationView(LoginRequiredMixin, BaseCardCreationMixin, CreateView):
-    model = DebitCard
+class DebitCardCreationView(
+    LoginRequiredMixin, DebitCardMixin, BaseCardCreationMixin, CreateView
+):
     form_class = DebitCardCreationForm
     redirect_field_name = "/cards/dc/create/"
     success_url = "/cards/dc/"

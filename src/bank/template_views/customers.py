@@ -2,7 +2,6 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import redirect
@@ -42,23 +41,17 @@ class CustomerDetailView(LoginRequiredMixin, DetailView):
     context_object_name = "customer"
 
     def get_object(self, queryset=None):
-        # Use a custom queryset if provided; this is required for subclasses
-        # like DateDetailView
         if queryset is None:
             queryset = self.get_queryset()
 
         try:
-            # Get the single item from the filtered queryset
-            obj = queryset.get()
+            obj = queryset.get(user=self.request.user)
         except queryset.model.DoesNotExist:
             raise Http404(
                 _("No %(verbose_name)s found matching the query")
                 % {"verbose_name": queryset.model._meta.verbose_name}
             )
         return obj
-
-    def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
 
 
 class CustomerCreationForm(forms.ModelForm):
@@ -109,16 +102,13 @@ class CustomerUpdateView(LoginRequiredMixin, UpdateView):
             queryset = self.get_queryset()
 
         try:
-            obj = queryset.get()
+            obj = queryset.get(user=self.request.user)
         except queryset.model.DoesNotExist:
             raise Http404(
                 _("No %(verbose_name)s found matching the query")
                 % {"verbose_name": queryset.model._meta.verbose_name}
             )
         return obj
-
-    def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
