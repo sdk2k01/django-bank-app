@@ -1,0 +1,9 @@
+.ropeproject/
+.ruff_cache/
+.gitignore
+.pre-commit-config.yaml
+.python-version
+pyproject.toml
+pyrightconfig.json
+README.md
+**/__pycache__/
