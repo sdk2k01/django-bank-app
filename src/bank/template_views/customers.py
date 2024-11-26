@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.http import Http404, HttpResponseForbidden
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
@@ -72,6 +72,19 @@ class CustomerCreateView(AdminRequiredMixin, CreateView):
     form_class = CustomerCreationForm
     template_name = "customers/create.html"
     success_url = reverse_lazy("customers-list")
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            print("Form Invalid")
+            # return self.form_invalid(form)
+            return render(request, self.template_name, {"form": form})
 
     @transaction.atomic  # Make user creation and customer creation atomic
     def form_valid(self, form):
