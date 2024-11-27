@@ -24,14 +24,6 @@ def validate_pan_no(pan):
         )
 
 
-def validate_card_no(card):
-    if not (card.isdigit() and len(card) == 16):
-        raise ValidationError(
-            "%(card)s must be 16 digits",
-            params={"card": card},
-        )
-
-
 def get_card_expiry():
     """
     Set default expiry date as 10 years from now.

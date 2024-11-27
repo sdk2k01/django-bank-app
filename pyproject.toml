@@ -17,6 +17,7 @@ dev = [
     "ruff",
     "pre-commit",
     "factory_boy",
+    "coverage",
     "django-types>=0.19.1",
     "django-stubs[compatible-mypy]"
 ]

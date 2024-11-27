@@ -163,3 +163,5 @@ cython_debug/
 **/.DS_Store
 pyrightconfig.json
 .python-version
+
+.coveragerc

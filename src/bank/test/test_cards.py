@@ -1,9 +1,17 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from factory import Faker
 
 from bank.factories import CustomerFactory
-from bank.models import CreditCard, CurrentAccount, Customer, DebitCard, SavingsAccount
+from bank.models import (
+    CreditCard,
+    CurrentAccount,
+    Customer,
+    DebitCard,
+    SavingsAccount,
+    cards,
+)
 
 
 class TestCardCreation(TestCase):
@@ -29,47 +37,90 @@ class TestCardCreation(TestCase):
         """
         Test creation of credit card from savings bank account.
         """
-        cc_sb = CreditCard.objects.create(ac_no=self.sba.ac_no)
-        self.assertEqual(cc_sb.card_type, "CC")
-        self.assertEqual(cc_sb.ac_no, self.sba.ac_no)
-        retrieved_cc = CreditCard.objects.get(card_no=cc_sb.card_no)
-        self.assertEqual(cc_sb.ac_no, retrieved_cc.ac_no)
-        self.assertEqual(cc_sb.card_type, retrieved_cc.card_type)
-        self.assertEqual(cc_sb.issued, retrieved_cc.issued)
-        self.assertEqual(cc_sb.expiry, retrieved_cc.expiry)
+        card = CreditCard(ac_no=self.sba.ac_no)
+        card.full_clean()
+        card.save()
+        self.assertEqual(card.ac_no, self.sba.ac_no)
+        retrieved_card = CreditCard.objects.get(card_no=card.card_no)
+        self.assertEqual(card.ac_no, retrieved_card.ac_no)
+        self.assertEqual(card.issued, retrieved_card.issued)
+        self.assertEqual(card.expiry, retrieved_card.expiry)
 
     def test_create_dc_sba(self):
         """
         Test creation of debit card from savings bank account.
         """
-        dc_sb = DebitCard.objects.create(ac_no=self.sba.ac_no)
-        self.assertEqual(dc_sb.card_type, "DC")
-        self.assertEqual(dc_sb.ac_no, self.sba.ac_no)
-        retrieved_dc = DebitCard.objects.get(card_no=dc_sb.card_no)
-        self.assertEqual(dc_sb.ac_no, retrieved_dc.ac_no)
-        self.assertEqual(dc_sb.card_type, retrieved_dc.card_type)
-        self.assertEqual(dc_sb.issued, retrieved_dc.issued)
+        card = DebitCard(ac_no=self.sba.ac_no)
+        card.full_clean()
+        card.save()
+        self.assertEqual(card.ac_no, self.sba.ac_no)
+        retrieved_card = DebitCard.objects.get(card_no=card.card_no)
+        self.assertEqual(card.ac_no, retrieved_card.ac_no)
+        self.assertEqual(card.issued, retrieved_card.issued)
 
     def test_create_cc_ca(self):
         """
         Test creation of credit card from current account.
         """
-        cc_ca = CreditCard.objects.create(ac_no=self.ca.ac_no)
-        self.assertEqual(cc_ca.card_type, "CC")
-        self.assertEqual(cc_ca.ac_no, self.ca.ac_no)
-        retrieved_cc = CreditCard.objects.get(card_no=cc_ca.card_no)
-        self.assertEqual(cc_ca.ac_no, retrieved_cc.ac_no)
-        self.assertEqual(cc_ca.card_type, retrieved_cc.card_type)
-        self.assertEqual(cc_ca.issued, retrieved_cc.issued)
+        card = CreditCard(ac_no=self.ca.ac_no)
+        card.full_clean()
+        card.save()
+        self.assertEqual(card.ac_no, self.ca.ac_no)
+        retrieved_card = CreditCard.objects.get(card_no=card.card_no)
+        self.assertEqual(card.ac_no, retrieved_card.ac_no)
+        self.assertEqual(card.issued, retrieved_card.issued)
 
     def test_create_dc_ca(self):
         """
         Test creation of debit card from current account.
         """
-        dc_ca = DebitCard.objects.create(ac_no=self.ca.ac_no)
-        self.assertEqual(dc_ca.card_type, "DC")
-        self.assertEqual(dc_ca.ac_no, self.ca.ac_no)
-        retrieved_dc = DebitCard.objects.get(card_no=dc_ca.card_no)
-        self.assertEqual(dc_ca.ac_no, retrieved_dc.ac_no)
-        self.assertEqual(dc_ca.card_type, retrieved_dc.card_type)
-        self.assertEqual(dc_ca.issued, retrieved_dc.issued)
+        card = DebitCard(ac_no=self.ca.ac_no)
+        card.full_clean()
+        card.save()
+        self.assertEqual(card.ac_no, self.ca.ac_no)
+        retrieved_card = DebitCard.objects.get(card_no=card.card_no)
+        self.assertEqual(card.ac_no, retrieved_card.ac_no)
+        self.assertEqual(card.issued, retrieved_card.issued)
+
+    def test_create_serial_cc(self):
+        """
+        Test whether creating credit cards serially maintains order of card no.s.
+        """
+        card_1 = CreditCard.objects.create(ac_no=self.ca.ac_no)
+        retrieved_card = CreditCard.objects.get(card_no=card_1.card_no)
+
+        card_2 = CreditCard(ac_no=self.sba.ac_no)
+        card_2.full_clean()
+
+        self.assertEqual(int(card_2.card_no[4::]), int(retrieved_card.ac_no[4::]) + 1)
+
+    def test_create_serial_dc(self):
+        """
+        Test whether creating debit cards serially maintains order of card no.s.
+        """
+        card_1 = DebitCard.objects.create(ac_no=self.sba.ac_no)
+        retrieved_card = DebitCard.objects.get(card_no=card_1.card_no)
+
+        card_2 = DebitCard(ac_no=self.ca.ac_no)
+        card_2.full_clean()
+
+        self.assertEqual(int(card_2.card_no[4::]), int(retrieved_card.ac_no[4::]) + 1)
+
+    def test_create_serial_cards_random_order(self):
+        """
+        Test whether creating cards of all types serially maintains order of card no.s.
+        """
+        dc_1 = DebitCard.objects.create(ac_no=self.sba.ac_no)
+        cc_1 = CreditCard.objects.create(ac_no=self.ca.ac_no)
+
+        retrieved_cc = CreditCard.objects.get(card_no=cc_1.card_no)
+        cc_2 = CreditCard(ac_no=self.sba.ac_no)
+        cc_2.full_clean()
+
+        self.assertEqual(int(cc_2.card_no[4::]), int(retrieved_cc.card_no[4::]) + 1)
+
+        retrieved_dc = DebitCard.objects.get(card_no=dc_1.card_no)
+        dc_2 = DebitCard(ac_no=self.ca.ac_no)
+        dc_2.full_clean()
+
+        self.assertEqual(int(dc_2.card_no[4::]), int(retrieved_dc.card_no[4::]) + 1)

@@ -26,24 +26,69 @@ class TestAccountCreation(TestCase):
         """
         Test Happy Path for savings account creation.
         """
-        sba = SavingsAccount.objects.create(ac_holder=self.customer)
-        self.assertEqual(sba.ac_type, "SB")
-        self.assertEqual(sba.ac_holder, self.customer)
-        retrieved_sba = SavingsAccount.objects.get(ac_no=sba.ac_no)
-        self.assertEqual(retrieved_sba.ac_type, sba.ac_type)
-        self.assertEqual(retrieved_sba.ac_holder, sba.ac_holder)
-        self.assertEqual(retrieved_sba.ac_holder.user, sba.ac_holder.user)
-        self.assertEqual(retrieved_sba.created, sba.created)
+
+        account = SavingsAccount(ac_holder=self.customer)
+        account.full_clean()
+        account.save()
+        self.assertEqual(account.ac_holder, self.customer)
+        retrieved_account = SavingsAccount.objects.get(ac_no=account.ac_no)
+        self.assertEqual(retrieved_account.ac_holder, account.ac_holder)
+        self.assertEqual(retrieved_account.ac_holder.user, account.ac_holder.user)
+        self.assertEqual(retrieved_account.created, account.created)
+
+    def test_create_serial_savings_accounts(self):
+        """
+        Test whether creating serial savings accounts maintains the order of account no.s.
+        """
+        ac_1 = SavingsAccount.objects.create(ac_holder=self.customer)
+        retrieved_ac = SavingsAccount.objects.get(ac_no=ac_1.ac_no)
+
+        ac_2 = SavingsAccount(ac_holder=self.customer)
+        ac_2.full_clean()
+
+        self.assertEqual(int(ac_2.ac_no[2::]), int(retrieved_ac.ac_no[2::]) + 1)
 
     def test_create_current_account(self):
         """
         Test Sad Path for current account creation.
         """
-        ca = CurrentAccount.objects.create(ac_holder=self.customer)
-        self.assertEqual(ca.ac_type, "CA")
-        self.assertEqual(ca.ac_holder, self.customer)
-        retrieved_ca = CurrentAccount.objects.get(ac_no=ca.ac_no)
-        self.assertEqual(retrieved_ca.ac_type, ca.ac_type)
-        self.assertEqual(retrieved_ca.ac_holder, ca.ac_holder)
-        self.assertEqual(retrieved_ca.ac_holder.user, ca.ac_holder.user)
-        self.assertEqual(retrieved_ca.created, ca.created)
+        account = CurrentAccount(ac_holder=self.customer)
+        account.full_clean()
+        account.save()
+        self.assertEqual(account.ac_holder, self.customer)
+        retrieved_account = CurrentAccount.objects.get(ac_no=account.ac_no)
+        self.assertEqual(retrieved_account.ac_holder, account.ac_holder)
+        self.assertEqual(retrieved_account.ac_holder.user, account.ac_holder.user)
+        self.assertEqual(retrieved_account.created, account.created)
+
+    def test_create_serial_current_accounts(self):
+        """
+        Test whether creating serial current accounts maintains the order of account no.s.
+        """
+        ac_1 = CurrentAccount.objects.create(ac_holder=self.customer)
+        retrieved_ac = CurrentAccount.objects.get(ac_no=ac_1.ac_no)
+
+        ac_2 = CurrentAccount(ac_holder=self.customer)
+        ac_2.full_clean()
+
+        self.assertEqual(int(ac_2.ac_no[2::]), int(retrieved_ac.ac_no[2::]) + 1)
+
+    def test_create_serial_accounts_random_order(self):
+        """
+        Test whether creating serial accounts of various types maintains order of ac no.s for given type.
+        """
+        sba_1 = SavingsAccount.objects.create(ac_holder=self.customer)
+        ca_1 = CurrentAccount.objects.create(ac_holder=self.customer)
+
+        retrieved_sba = SavingsAccount.objects.get(ac_no=sba_1.ac_no)
+        retrieved_ca = CurrentAccount.objects.get(ac_no=ca_1.ac_no)
+
+        sba_2 = SavingsAccount(ac_holder=self.customer)
+        sba_2.full_clean()
+
+        self.assertEqual(int(sba_2.ac_no[2::]), int(retrieved_sba.ac_no[2::]) + 1)
+
+        ca_2 = CurrentAccount(ac_holder=self.customer)
+        ca_2.full_clean()
+
+        self.assertEqual(int(ca_2.ac_no[2::]), int(retrieved_ca.ac_no[2::]) + 1)
