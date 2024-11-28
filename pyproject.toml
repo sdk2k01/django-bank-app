@@ -28,3 +28,15 @@ plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
 django_settings_module = "src.bankapp.settings"
+
+[tool.coverage.run]
+omit = [
+    "*test*",
+    "*/templatetags/*",
+    # "*/views/*",
+    "*/migrations/*",
+    "*/factories.py",
+    "*/providers.py",
+    "*/manage.py",
+    "*/bankapp/*",
+]
