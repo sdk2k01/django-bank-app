@@ -5,6 +5,7 @@ from factory import Faker
 
 from bank.factories import CustomerFactory
 from bank.models import Customer
+from bank.serializers import CustomerSerializer
 
 
 class TestRegisterUser(TestCase):
@@ -240,3 +241,54 @@ class TestRegisterUser(TestCase):
             )
             created_customer_2.full_clean()
             created_customer_2.save()
+
+
+class TestRegisterUserSerializer(TestCase):
+    """
+    Test Case dealing with user serializer.
+    """
+
+    def test_customer_serializer_create(self):
+        """
+        Test CustomerSerializer create method.
+        """
+        customer = CustomerFactory()
+        customer_data = {
+            "pan": customer.pan,
+            "name": customer.name,
+            "ph_no": customer.ph_no,
+            "password": "passpass",
+        }
+
+        serializer = CustomerSerializer(data=customer_data)
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+
+        serializer.save()
+        retrieved_customer = Customer.objects.get(pan=customer.pan)
+
+        self.assertIsNotNone(retrieved_customer)
+        self.assertEqual(retrieved_customer.name, customer_data["name"])
+        self.assertEqual(retrieved_customer.pan, customer_data["pan"])
+        self.assertEqual(retrieved_customer.ph_no, customer_data["ph_no"])
+
+    def test_customer_serializer_validation(self):
+        """
+        Test Validation(s) of customer serializer.
+        """
+        customer = CustomerFactory()
+        customer_data = {
+            "pan": "JOKEOFAPAN",
+            "name": "",
+            "ph_no": "879598469C",
+            "password": "passpass",
+        }
+
+        serializer = CustomerSerializer(data=customer_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("pan", serializer.errors)
+        self.assertIn("name", serializer.errors)
+        self.assertIn("ph_no", serializer.errors)
+        self.assertNotIn("password", serializer.errors)
+
+        with self.assertRaises(AssertionError):
+            serializer.save()

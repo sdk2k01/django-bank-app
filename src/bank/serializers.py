@@ -1,7 +1,14 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from bank.models import *
+from bank.models import (
+    CreditCard,
+    CurrentAccount,
+    Customer,
+    DebitCard,
+    SavingsAccount,
+    Transaction,
+)
 
 
 class CustomerSerializer(serializers.ModelSerializer):
