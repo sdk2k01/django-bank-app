@@ -1,7 +1,14 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import *
+from .models import (
+    CreditCard,
+    CurrentAccount,
+    Customer,
+    DebitCard,
+    SavingsAccount,
+    Transaction,
+)
 
 
 class CustomerAdmin(admin.ModelAdmin):
@@ -19,9 +26,6 @@ admin.site.register(Customer, CustomerAdmin)
 class BaseProductAdmin(admin.ModelAdmin):
     list_display = ["ac_no", "ac_holder", "created"]
 
-    def get_queryset(self, request):
-        return super().get_queryset(request)
-
 
 @admin.register(SavingsAccount)
 class SavingsAccountAdmin(BaseProductAdmin):
@@ -34,8 +38,7 @@ class CurrentAccountAdmin(BaseProductAdmin):
 
 
 class BaseCardsAdmin(admin.ModelAdmin):
-    def get_queryset(self, request):
-        return super().get_queryset(request)
+    list_display = ["card_no", "issued", "expiry", "ac_no"]
 
 
 @admin.register(CreditCard)

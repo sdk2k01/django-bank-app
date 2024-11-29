@@ -7,7 +7,7 @@ from .utils import get_card_expiry
 class Cards(models.Model):
     ac_no = models.CharField(max_length=20)
     issued = models.DateTimeField(auto_now_add=True)
-    expiry = models.DateTimeField(default=get_card_expiry)
+    expiry = models.DateTimeField(default=get_card_expiry, editable=False)
 
     class Meta:  # type: ignore
         abstract = True

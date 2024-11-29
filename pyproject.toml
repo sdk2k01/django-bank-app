@@ -33,7 +33,7 @@ django_settings_module = "src.bankapp.settings"
 omit = [
     "*test*",
     "*/templatetags/*",
-    # "*/views/*",
+    "*/views/*",
     "*/migrations/*",
     "*/factories.py",
     "*/providers.py",

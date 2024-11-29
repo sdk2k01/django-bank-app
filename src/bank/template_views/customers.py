@@ -1,3 +1,5 @@
+from webbrowser import get
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -7,7 +9,7 @@ from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView, View
 
 from bank.models.customers import Customer
 
@@ -27,6 +29,17 @@ class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
                 "403 Forbidden: You don't have permission to access this page."
             )
         return redirect(f"/{self.get_login_url()}?next={self.request.path}")
+
+
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(reverse_lazy("login"))
+
+        if request.user.is_staff or request.user.is_superuser:
+            return reverse_lazy("customers-list")  # URL name for "customers/"
+        else:
+            return reverse_lazy("customer-details")
 
 
 class CustomerListView(AdminRequiredMixin, ListView):
